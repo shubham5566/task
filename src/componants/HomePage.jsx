@@ -1,8 +1,9 @@
 import React from 'react'
+import UserData from './UserData'
 
 const HomePage = () => {
   return (
-    <div>HomePage</div>
+    <UserData/>
   )
 }
 
