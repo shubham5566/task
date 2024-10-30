@@ -8,12 +8,31 @@ const UserData = () => {
   const { username } = useSelector((state) => state.auth); // Access logged-in username
   const [searchTerm, setSearchTerm] = useState('');
   const [isEditing, setIsEditing] = useState(false);
+  const [isFormValid, setIsFormValid] = useState(false);
   const [currentUser, setCurrentUser] = useState({ name: '', email: '', phone: '', company: { name: '' }, website: '' });
 
   useEffect(() => {
     dispatch(fetchUsers());
   }, [dispatch]);
+  useEffect(() => {
 
+    // Check if all required fields are filled to enable/disable the button
+
+    setIsFormValid(
+
+      currentUser.name.trim() !== '' &&
+
+      currentUser.email.trim() !== '' &&
+
+      currentUser.phone.trim() !== '' &&
+
+      currentUser.company.name.trim() !== '' &&
+
+      currentUser.website.trim() !== ''
+
+    );
+
+  }, [currentUser]);
   // Filter users based on search term
   const filteredUsers = users.filter(user =>
     user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -98,9 +117,20 @@ const UserData = () => {
           onChange={(e) => setCurrentUser({ ...currentUser, website: e.target.value })}
           className="mr-2 p-2 border rounded"
         />
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
+        {/* <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
           {isEditing ? 'Update User' : 'Add User'}
-        </button>
+        </button> */}
+        <button
+
+type="submit"
+
+className={`bg-blue-500 text-white px-4 py-2 rounded ${!isFormValid ? 'opacity-50 cursor-not-allowed' : ''}`}
+
+disabled={!isFormValid} // Disable the button if form is not valid
+
+>
+{isEditing ? 'Update User' : 'Add User'}
+</button>
       </form>
 
       {loading ? (
